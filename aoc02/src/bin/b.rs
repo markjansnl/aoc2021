@@ -1,20 +1,22 @@
 use aoc02::input;
 
 pub fn final_depth(input: &str) -> usize {
-    let (horizontal, depth, _aim) = input
+    input
         .lines()
         .map(|line| line.split_whitespace().collect::<Vec<&str>>())
         .map(|vec| (vec[0], vec[1].parse::<usize>().unwrap()))
         .fold(
-            (0, 0, 0),
-            |(horizontal, depth, aim), (command, distance)| match command {
-                "forward" => (horizontal + distance, depth + aim * distance, aim),
-                "down" => (horizontal, depth, aim + distance),
-                "up" => (horizontal, depth, aim - distance),
+            [0, 0, 0],
+            |[horizontal, depth, aim], (command, distance)| match command {
+                "forward" => [horizontal + distance, depth + aim * distance, aim],
+                "down" => [horizontal, depth, aim + distance],
+                "up" => [horizontal, depth, aim - distance],
                 _ => unreachable!(),
             },
-        );
-    horizontal * depth
+        )
+        .iter()
+        .take(2)
+        .product()
 }
 
 fn main() {
