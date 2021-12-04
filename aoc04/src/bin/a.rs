@@ -43,7 +43,11 @@ fn first_bingo(input: &str) -> usize {
                 board.marked[y][x] = true;
 
                 if board.marked[y] == [true; 5]
-                    || board.marked.iter().filter(|row| row[x]).count() == 5
+                    || (board.marked[0][x]
+                        && board.marked[1][x]
+                        && board.marked[2][x]
+                        && board.marked[3][x]
+                        && board.marked[4][x])
                 {
                     return draw
                         * board
