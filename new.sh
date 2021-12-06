@@ -2,8 +2,13 @@
 
 set -e
 
-cargo new $1
-cd $1/src
+source session
+DAY_LONG=$(date '+%d')
+DAY_SHORT=$(date '+%d' | sed 's/^0*//')
+FOLDER=aoc$DAY_LONG
+
+cargo new $FOLDER
+cd $FOLDER/src
 rm -f main.rs
 echo 'pub mod input;' > lib.rs
 cat > input.rs << EOF
@@ -14,10 +19,14 @@ pub const USER: &'static str = include_str!("input/user.txt");
 EOF
 mkdir input
 touch input/example.txt
-touch input/user.txt
+curl "https://adventofcode.com/2021/day/$DAY_SHORT/input" --cookie "session=$SESSION" | perl -pe 'chomp if eof' > input/user.txt
 mkdir bin
 cat > bin/a.rs << EOF
-use $1::input;
+use $FOLDER::input;
+
+fn f(input: &str) -> usize {
+    0
+}
 
 fn main() {
     println!("{}", f(input::USER));
