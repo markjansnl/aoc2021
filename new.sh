@@ -20,11 +20,11 @@ cat > bin/a.rs << EOF
 use $1::input;
 
 fn main() {
-
+    println!("{}", f(input::USER));
 }
 
 #[test]
 fn test_example() {
-
+    assert_eq!(0, f(input::EXAMPLE));
 }
 EOF
