@@ -62,9 +62,7 @@ fn sum_output_values(input: &str) -> usize {
                     digits
                         .iter()
                         .enumerate()
-                        .find(|(_, digit2)| {
-                            digit.intersection(digit2).count() == digit.len().max(digit2.len())
-                        })
+                        .find(|(_, digit2)| &&digit == digit2)
                         .unwrap()
                         .0
                 })
