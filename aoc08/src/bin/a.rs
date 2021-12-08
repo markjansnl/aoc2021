@@ -1,29 +1,14 @@
 use aoc08::input;
 
-fn f(input: &str) -> usize {
+fn sum_output_values(input: &str) -> usize {
     input
         .lines()
         .map(|line| {
-            let io = line.split("|").collect::<Vec<&str>>();
-            let output = io[1].trim();
-            output
+            let io = line.split(" | ").collect::<Vec<&str>>();
+            io[1]
                 .split(" ")
-                .map(|digit| {
-                    let mut chars = digit
-                        .chars()
-                        .filter(|char| *char != '\n')
-                        .collect::<Vec<char>>();
-                    chars.sort();
-                    chars.into_iter().fold(String::new(), |mut acc, char| {
-                        acc.push(char);
-                        acc
-                    })
-                })
                 .filter(|str| match str.len() {
-                    2 => true,
-                    3 => true,
-                    4 => true,
-                    7 => true,
+                    2 | 3 | 4 | 7 => true,
                     _ => false,
                 })
                 .count()
@@ -32,10 +17,10 @@ fn f(input: &str) -> usize {
 }
 
 fn main() {
-    println!("{}", f(input::USER));
+    println!("{}", sum_output_values(input::USER));
 }
 
 #[test]
 fn test_example() {
-    assert_eq!(0, f(input::EXAMPLE));
+    assert_eq!(26, sum_output_values(input::EXAMPLE));
 }
