@@ -10,7 +10,7 @@ fn sum_output_values(input: &str) -> usize {
                 str.split(" ")
                     .map(|digit| digit.chars().collect::<HashSet<char>>())
             });
-            let signals = io.next().unwrap().collect::<Vec<_>>();
+            let mut signals = io.next().unwrap().collect::<Vec<_>>();
             let output = io.next().unwrap();
 
             let mut digits = Vec::new();
@@ -18,18 +18,13 @@ fn sum_output_values(input: &str) -> usize {
                 .into_iter()
                 .for_each(|_| digits.push(HashSet::new()));
 
-            for signal in signals.clone() {
+            signals.sort_by(|a, b| a.len().cmp(&b.len()));
+
+            for signal in signals {
                 match signal.len() {
                     2 => digits[1] = signal,
                     3 => digits[7] = signal,
                     4 => digits[4] = signal,
-                    7 => digits[8] = signal,
-                    _ => {}
-                }
-            }
-
-            for signal in signals.clone() {
-                match signal.len() {
                     5 => {
                         if signal.intersection(&digits[1]).count() == 2 {
                             digits[3] = signal;
@@ -39,11 +34,6 @@ fn sum_output_values(input: &str) -> usize {
                             digits[5] = signal;
                         }
                     }
-                    _ => {}
-                }
-            }
-            for signal in signals {
-                match signal.len() {
                     6 => {
                         if signal.intersection(&digits[4]).count() == 4 {
                             digits[9] = signal;
@@ -53,7 +43,8 @@ fn sum_output_values(input: &str) -> usize {
                             digits[0] = signal;
                         }
                     }
-                    _ => {}
+                    7 => digits[8] = signal,
+                    _ => unreachable!(),
                 }
             }
 
