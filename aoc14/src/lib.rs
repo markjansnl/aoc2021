@@ -39,15 +39,13 @@ pub fn most_minus_least(input: &str, steps: usize) -> usize {
 
     let mut pairs: HashMap<Pair, usize> =
         template.windows(2).fold(HashMap::new(), |mut map, pair| {
-            map.entry(pair.into())
-                .and_modify(|count| *count += 1)
-                .or_insert(1);
+            add_count(&mut map, pair.into(), 1);
             map
         });
 
     let mut char_count: HashMap<char, usize> =
         template.iter().fold(HashMap::new(), |mut map, &c| {
-            map.entry(c).and_modify(|count| *count += 1).or_insert(1);
+            add_count(&mut map, c, 1);
             map
         });
 
