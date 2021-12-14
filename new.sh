@@ -3,8 +3,12 @@
 set -e
 
 source session
-DAY_LONG=$(date '+%d')
-DAY_SHORT=$(date '+%d' | sed 's/^0*//')
+if [ -z "$1" ]; then
+    DAY_LONG=$(date '+%d')
+else
+    DAY_LONG=$1
+fi
+DAY_SHORT=$(echo $DAY_LONG | sed 's/^0*//')
 FOLDER=aoc$DAY_LONG
 
 cargo new $FOLDER
