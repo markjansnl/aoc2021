@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use aoc09::input;
 use pathfinding::prelude::Matrix;
 
@@ -12,7 +14,7 @@ fn sum_risk_levels(input: &str) -> usize {
 
     let matrix = Matrix::from_vec(rows, columns, values).unwrap();
 
-    (0..rows)
+    let mut basin_sizes = (0..rows)
         .into_iter()
         .map(|y| {
             (0..columns)
@@ -25,12 +27,34 @@ fn sum_risk_levels(input: &str) -> usize {
                         .next()
                     {
                         Some(_) => None,
-                        None => Some(value + 1),
+                        None => Some(basin_size(&matrix, HashSet::from([(y, x)]))),
                     }
                 })
-                .sum::<usize>()
+                .collect::<Vec<_>>()
         })
-        .sum()
+        .flatten()
+        .collect::<Vec<_>>();
+
+    basin_sizes.sort();
+    basin_sizes.reverse();
+
+    basin_sizes.into_iter().take(3).product()
+}
+
+fn basin_size(matrix: &Matrix<usize>, set: HashSet<(usize, usize)>) -> usize {
+    let mut set2 = set.clone();
+    for &p in set.iter() {
+        set2.extend(
+            matrix
+                .neighbours(p, false)
+                .filter(|&neighbour| *matrix.get(neighbour).unwrap() < 9),
+        );
+    }
+    if set2.len() == set.len() {
+        set.len()
+    } else {
+        basin_size(matrix, set2)
+    }
 }
 
 fn main() {
@@ -39,5 +63,5 @@ fn main() {
 
 #[test]
 fn test_example() {
-    assert_eq!(15, sum_risk_levels(input::EXAMPLE));
+    assert_eq!(1134, sum_risk_levels(input::EXAMPLE));
 }
