@@ -13,27 +13,20 @@ fn sum_risk_levels(input: &str) -> usize {
     );
 
     let matrix = Matrix::from_vec(rows, columns, values).unwrap();
-
-    let mut basin_sizes = (0..rows)
-        .into_iter()
-        .map(|y| {
-            (0..columns)
-                .into_iter()
-                .filter_map(|x| {
-                    let value = matrix.get((y, x)).unwrap();
-                    match matrix
-                        .neighbours((y, x), false)
-                        .filter(|&neighbour| matrix.get(neighbour).unwrap() <= value)
-                        .next()
-                    {
-                        Some(_) => None,
-                        None => Some(basin_size(&matrix, HashSet::from([(y, x)]))),
-                    }
-                })
-                .collect::<Vec<_>>()
-        })
-        .flatten()
-        .collect::<Vec<_>>();
+    let mut basin_sizes = Vec::new();
+    for y in 0..rows {
+        for x in 0..columns {
+            let value = matrix.get((y, x)).unwrap();
+            if matrix
+                .neighbours((y, x), false)
+                .filter(|&neighbour| matrix.get(neighbour).unwrap() <= value)
+                .next()
+                .is_none()
+            {
+                basin_sizes.push(basin_size(&matrix, HashSet::from([(y, x)])));
+            }
+        }
+    }
 
     basin_sizes.sort();
     basin_sizes.reverse();
