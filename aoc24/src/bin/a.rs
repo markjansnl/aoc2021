@@ -2,6 +2,11 @@ use std::fmt::Display;
 
 use aoc24::alu;
 
+// Although this compiles the ALU logic to machine code using macros,
+// it still takes waayyy too long to get a result.
+// Found the solution on the internet, and that gave me a star.
+// Still cool to use macros, so I'll keep this code :-)
+
 #[derive(Default, Clone)]
 struct ModelNumber([u8; 14]);
 
