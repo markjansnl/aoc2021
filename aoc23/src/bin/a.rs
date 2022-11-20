@@ -230,9 +230,7 @@ impl Situation {
 
         // If we cannot place an amphid in its destination directly, put them in the hallway
         self.movables(false)
-            .filter(|(place, _)| {
-                place.clone() as usize > HALLWAY_7
-            })
+            .filter(|(place, _)| place.clone() as usize > HALLWAY_7)
             .map(|(place, amphipod_type)| {
                 let (y, x) = place.position();
                 (0..7).filter_map(move |hallway_place| {
@@ -373,13 +371,14 @@ impl Situation {
             .enumerate()
             .filter(move |(place, amphipod_type)| {
                 amphipod_type != &&Empty
-                    && (amphipod_type != &&GOAL.0[*place] || match *place {
-                        ROOM_A_NORTH => self.0[ROOM_A_SOUTH] != GOAL.0[ROOM_A_SOUTH],
-                        ROOM_B_NORTH => self.0[ROOM_B_SOUTH] != GOAL.0[ROOM_B_SOUTH],
-                        ROOM_C_NORTH => self.0[ROOM_C_SOUTH] != GOAL.0[ROOM_C_SOUTH],
-                        ROOM_D_NORTH => self.0[ROOM_D_SOUTH] != GOAL.0[ROOM_D_SOUTH],
-                        _ => false
-                    })                                        
+                    && (amphipod_type != &&GOAL.0[*place]
+                        || match *place {
+                            ROOM_A_NORTH => self.0[ROOM_A_SOUTH] != GOAL.0[ROOM_A_SOUTH],
+                            ROOM_B_NORTH => self.0[ROOM_B_SOUTH] != GOAL.0[ROOM_B_SOUTH],
+                            ROOM_C_NORTH => self.0[ROOM_C_SOUTH] != GOAL.0[ROOM_C_SOUTH],
+                            ROOM_D_NORTH => self.0[ROOM_D_SOUTH] != GOAL.0[ROOM_D_SOUTH],
+                            _ => false,
+                        })
                     && (with_locked || {
                         match *place {
                             ROOM_A_SOUTH => self.0[ROOM_A_NORTH] == Empty,
